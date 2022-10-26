@@ -1,0 +1,26 @@
+server:
+  port: 8080
+
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher   #resolve incompability between swagger and spring-boot
+  kafka:
+    listener:
+      ack-mode: RECORD  #default é BATCH
+      concurrency: 2
+#      missing-topics-fatal: true   #falha ao tentar ler de um tópico que não existe
+    consumer:
+      bootstrap-servers:
+        - localhost:9092
+      group-id: ${group-id:grupo-01}
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer  #default
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer  #default
+      auto-offset-reset: earliest #default latest - whether to consume from the beginning of a topic partition or to only consume new messages when there is no initial offset for the consumer group
+      properties:
+        allow.auto.create.topics: false    #bloqueia a criação de tópicos no consumer
+    producer:
+      bootstrap-servers:
+        - localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer    #default
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer    #default
